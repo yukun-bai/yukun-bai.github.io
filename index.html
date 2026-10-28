@@ -1,470 +1,725 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yukun Bai · 白宇坤</title>
-<meta name="description" content="Yukun Bai (白宇坤) — M.Sc. student at NTU working on vision-language-action models, visual grounding, real-world online RL and embodied memory.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #fbfbf9;
-    --surface: #ffffff;
-    --text: #1d232a;
-    --muted: #5d6670;
-    --faint: #8a939c;
-    --accent: #203e59;
-    --accent-soft: #e8eef4;
-    --link: #2f6fb5;
-    --rule: #dfe5ea;
-    --hi: #e4572e;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #14181c;
-      --surface: #1b2026;
-      --text: #e5e9ed;
-      --muted: #a4adb6;
-      --faint: #79838d;
-      --accent: #9cc3e6;
-      --accent-soft: #1f2a35;
-      --link: #7fb4ea;
-      --rule: #2b333b;
-      --hi: #ff8a65;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #14181c;
-    --surface: #1b2026;
-    --text: #e5e9ed;
-    --muted: #a4adb6;
-    --faint: #79838d;
-    --accent: #9cc3e6;
-    --accent-soft: #1f2a35;
-    --link: #7fb4ea;
-    --rule: #2b333b;
-    --hi: #ff8a65;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yukun Bai · 白宇坤</title>
+  <meta name="description" content="Yukun Bai (白宇坤) — M.Sc. student at NTU working on vision-language-action models, visual grounding, real-world online RL and embodied memory.">
 
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Inter", "Noto Sans SC", -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-    font-size: 15.5px;
-    line-height: 1.65;
-  }
-  a { color: var(--link); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  b, strong { font-weight: 600; }
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23262628'/%3E%3Ctext x='32' y='42' font-family='Arial' font-size='28' font-weight='700' text-anchor='middle' fill='%23ffd470'%3EYB%3C/text%3E%3C/svg%3E">
 
-  /* language switching: elements carry data-l="en" or data-l="zh" */
-  html[lang="en"] [data-l="zh"], html[lang="zh-CN"] [data-l="en"] { display: none !important; }
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/custom.css">
 
-  .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
-
-  .topbar {
-    position: sticky; top: 0; z-index: 10;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--rule);
-  }
-  .topbar .wrap { display: flex; align-items: center; gap: 18px; height: 52px; }
-  .brand { font-weight: 700; color: var(--accent); white-space: nowrap; }
-  .nav { display: flex; gap: 16px; overflow-x: auto; scrollbar-width: none; flex: 1; }
-  .nav::-webkit-scrollbar { display: none; }
-  .nav a { color: var(--muted); font-size: 14px; white-space: nowrap; }
-  .nav a:hover { color: var(--text); text-decoration: none; }
-  .toggles { display: flex; gap: 6px; }
-  .toggles button {
-    font: inherit; font-size: 13px; cursor: pointer;
-    border: 1px solid var(--rule); background: var(--surface); color: var(--muted);
-    border-radius: 6px; padding: 3px 9px; line-height: 1.4;
-  }
-  .toggles button:hover { color: var(--text); }
-
-  header.hero { padding: 56px 0 28px; }
-  .hero h1 { margin: 0; font-size: 34px; line-height: 1.2; letter-spacing: -0.01em; color: var(--accent); }
-  .hero h1 .alt { font-weight: 500; color: var(--muted); font-size: 24px; margin-left: 10px; }
-  .hero .role { margin: 10px 0 0; color: var(--muted); }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
-  .tags li {
-    font-size: 13px; padding: 3px 10px; border-radius: 999px;
-    background: var(--accent-soft); color: var(--accent); font-weight: 500;
-  }
-  .links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 20px; font-size: 14.5px; }
-  .links a { display: inline-flex; align-items: center; gap: 6px; }
-  .links svg { width: 16px; height: 16px; flex: none; }
-
-  section { padding: 26px 0 8px; scroll-margin-top: 60px; }
-  section > h2 {
-    font-size: 19px; margin: 0 0 16px; color: var(--accent);
-    padding-bottom: 6px; border-bottom: 1px solid var(--rule);
-  }
-  p { margin: 0 0 12px; }
-
-  .pub { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: start; margin-bottom: 18px; }
-  .pub img, .proj img {
-    width: 100%; display: block; border-radius: 8px; border: 1px solid var(--rule); background: #fff;
-  }
-  .pub .title { font-weight: 600; }
-  .pub .authors, .pub .venue { color: var(--muted); font-size: 14.5px; }
-  .pub .authors .me { color: var(--text); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
-  .pub .venue em { color: var(--text); font-style: italic; }
-  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .badges a {
-    font-size: 12.5px; border: 1px solid var(--rule); border-radius: 5px; padding: 1px 8px; color: var(--muted);
-  }
-  .badges a:hover { color: var(--link); border-color: var(--link); text-decoration: none; }
-  .patent { margin-top: 6px; }
-
-  .proj { margin-bottom: 30px; }
-  .proj-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
-  .proj-head h3 { margin: 0; font-size: 16.5px; line-height: 1.4; }
-  .meta { color: var(--faint); font-size: 13.5px; white-space: nowrap; }
-  .sub { color: var(--muted); font-size: 14px; margin: 2px 0 12px; }
-  .proj figure { margin: 0 0 12px; }
-  .proj figcaption { color: var(--faint); font-size: 12.5px; margin-top: 6px; }
-  .stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 12px; }
-  .stat {
-    background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
-    padding: 8px 12px; min-width: 150px; flex: 1 1 150px;
-  }
-  .stat .num { font-size: 19px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .stat .lbl { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-  ul.points { margin: 0; padding-left: 1.2em; }
-  ul.points li { margin-bottom: 6px; }
-  ul.points li::marker { color: var(--faint); }
-  .group-label { font-weight: 600; font-size: 14.5px; margin: 14px 0 6px; color: var(--text); }
-
-  .timeline { list-style: none; margin: 0; padding: 0; }
-  .timeline li { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 10px 0; border-bottom: 1px dashed var(--rule); }
-  .timeline li:last-child { border-bottom: 0; }
-  .timeline .what { font-weight: 600; }
-  .timeline .detail { grid-column: 1 / -1; color: var(--muted); font-size: 14.5px; }
-
-  .skills { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; }
-  .skills dt { font-weight: 600; }
-  .skills dd { margin: 0; color: var(--muted); }
-
-  footer { padding: 36px 0 48px; color: var(--faint); font-size: 13px; }
-
-  @media (max-width: 640px) {
-    body { font-size: 15px; }
-    .wrap { padding: 0 16px; }
-    .brand { display: none; }
-    header.hero { padding: 36px 0 16px; }
-    .hero h1 { font-size: 28px; }
-    .hero h1 .alt { display: block; margin: 4px 0 0; font-size: 20px; }
-    .pub { grid-template-columns: 1fr; gap: 12px; }
-    .meta { white-space: normal; }
-    .skills { grid-template-columns: 1fr; }
-    .skills dd { margin-bottom: 8px; }
-  }
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="topbar">
-  <div class="wrap">
-    <span class="brand"><span data-l="en">Yukun Bai</span><span data-l="zh">白宇坤</span></span>
-    <nav class="nav">
-      <a href="#about"><span data-l="en">About</span><span data-l="zh">简介</span></a>
-      <a href="#publications"><span data-l="en">Publications</span><span data-l="zh">论文与专利</span></a>
-      <a href="#research"><span data-l="en">Research</span><span data-l="zh">研究经历</span></a>
-      <a href="#experience"><span data-l="en">Experience</span><span data-l="zh">实习经历</span></a>
-      <a href="#education"><span data-l="en">Education</span><span data-l="zh">教育背景</span></a>
-    </nav>
-    <div class="toggles">
-      <button id="langBtn" type="button" aria-label="Switch language">中文</button>
-      <button id="themeBtn" type="button" aria-label="Toggle dark mode">◐</button>
-    </div>
-  </div>
-</div>
+  <main>
 
-<main class="wrap">
+    <!--
+      - #SIDEBAR
+    -->
 
-  <header class="hero" id="about">
-    <h1><span data-l="en">Yukun Bai</span><span data-l="zh">白宇坤</span><span class="alt"><span data-l="en">白宇坤</span><span data-l="zh">Yukun Bai</span></span></h1>
-    <p class="role">
-      <span data-l="en">M.Sc. student, Signal Processing &amp; Machine Learning · School of EEE, Nanyang Technological University (NTU), Singapore</span>
-      <span data-l="zh">南洋理工大学（NTU）电气与电子工程学院 · 信号处理与机器学习硕士在读</span>
-    </p>
-    <ul class="tags">
-      <li>Vision-Language-Action Models</li>
-      <li>Visual Grounding</li>
-      <li>Real-world Online RL</li>
-      <li>Embodied Memory</li>
-    </ul>
-    <div class="links">
-      <a href="mailto:baiyukun0827@163.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-        baiyukun0827@163.com
-      </a>
-      <a href="https://github.com/cykbb">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
-        GitHub
-      </a>
-      <a href="https://doi.org/10.1109/LRA.2026.3728323">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2.5zM18 19v2H6"/></svg>
-        RA-L 2026
-      </a>
-    </div>
+    <aside class="sidebar" data-sidebar>
 
-    <div style="margin-top:26px">
-      <p data-l="en">
-        I am an M.Sc. student at Nanyang Technological University, working on embodied AI for robot manipulation.
-        My research asks how a robot policy can <b>see precisely</b> (grounding-first VLA), <b>learn quickly</b> in the real world (sample-efficient online RL with human-in-the-loop),
-        and <b>remember</b> what it has done (multi-timescale memory for long-horizon manipulation).
-        I have hands-on experience training and deploying policies on Franka FR3 and ARX X5 dual-arm robots.
-        Before NTU, I received my B.Eng. in Software Engineering from Dalian University of Technology.
-      </p>
-      <p data-l="zh">
-        我是南洋理工大学硕士生，研究面向机器人操作的具身智能。关注三个问题：策略如何<b>看得准</b>（视觉定位优先的 VLA）、如何在真机上<b>学得快</b>（人机协同的高样本效率在线强化学习）、以及如何<b>记得住</b>（面向长时程操作的多时间尺度记忆）。
-        有 Franka FR3 与 ARX X5 双臂真机上的策略训练与部署经验。本科毕业于大连理工大学软件工程专业。
-      </p>
-    </div>
-  </header>
+      <div class="sidebar-info">
 
-  <section id="publications">
-    <h2><span data-l="en">Publications &amp; Patents</span><span data-l="zh">论文与专利</span></h2>
+        <figure class="avatar-box">
+          <!-- To use a photo: put it at assets/images/avatar.jpg and replace this div with
+               <img src="./assets/images/avatar.jpg" alt="Yukun Bai" width="80"> -->
+          <div class="avatar-initials" aria-hidden="true">YB</div>
+        </figure>
 
-    <div class="pub">
-      <img src="assets/rema.jpg" alt="REMA concept: on-manifold vs. off-manifold failures and performance gains" loading="lazy">
-      <div>
-        <div class="title"><a href="https://doi.org/10.1109/LRA.2026.3728323">Efficient Online Robotic Reinforcement Learning with Explicit Manifold Alignment</a></div>
-        <div class="authors">Wenkai Guo, Peizhi Tang, <span class="me">Yukun Bai</span>, Ziming Yan, Haoyuan Deng, Guanxing Lu, Shijie Li, Ziwei Wang</div>
-        <div class="venue"><em>IEEE Robotics and Automation Letters (RA-L)</em>, 11(11): 12703–12710, 2026</div>
-        <div class="badges">
-          <a href="https://doi.org/10.1109/LRA.2026.3728323">Paper</a>
-          <a href="#rema"><span data-l="en">Project details</span><span data-l="zh">项目详情</span></a>
+        <div class="info-content">
+          <h1 class="name" title="Yukun Bai"><span data-l="en">Yukun Bai</span><span data-l="zh">白宇坤</span></h1>
+
+          <p class="title"><span data-l="en">Embodied AI · NTU</span><span data-l="zh">具身智能 · 南洋理工</span></p>
         </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span><span data-l="en">Show Contacts</span><span data-l="zh">联系方式</span></span>
+
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
       </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <ul class="contacts-list">
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title"><span data-l="en">Email</span><span data-l="zh">邮箱</span></p>
+              <a href="mailto:baiyukun0827@163.com" class="contact-link">baiyukun0827@<wbr>163.com</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="school-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title"><span data-l="en">Affiliation</span><span data-l="zh">学校</span></p>
+              <p class="contact-text"><span data-l="en">M.Sc., EEE, NTU</span><span data-l="zh">南洋理工大学 EEE 硕士</span></p>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="logo-github"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">GitHub</p>
+              <a href="https://github.com/cykbb" class="contact-link">github.com/cykbb</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title"><span data-l="en">Location</span><span data-l="zh">所在地</span></p>
+              <address><span data-l="en">Singapore</span><span data-l="zh">新加坡</span></address>
+            </div>
+          </li>
+
+        </ul>
+
+        <div class="separator"></div>
+
+        <ul class="social-list">
+          <li class="social-item">
+            <a href="https://github.com/cykbb" class="social-link" aria-label="GitHub">
+              <ion-icon name="logo-github"></ion-icon>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="mailto:baiyukun0827@163.com" class="social-link" aria-label="Email">
+              <ion-icon name="mail-outline"></ion-icon>
+            </a>
+          </li>
+          <li class="social-item">
+            <a href="https://doi.org/10.1109/LRA.2026.3728323" class="social-link" aria-label="RA-L paper">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+    </aside>
+
+
+    <!--
+      - #main-content
+    -->
+
+    <div class="main-content">
+
+      <!--
+        - #NAVBAR
+      -->
+
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <button class="navbar-link active" data-nav-link data-target="about"><span data-l="en">About</span><span data-l="zh">简介</span></button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="resume"><span data-l="en">Resume</span><span data-l="zh">履历</span></button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="research"><span data-l="en">Research</span><span data-l="zh">研究</span></button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="publications"><span data-l="en">Publications</span><span data-l="zh">论文</span></button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link lang-btn" data-lang-btn aria-label="Switch language">中文</button>
+          </li>
+        </ul>
+      </nav>
+
+
+      <!--
+        - #ABOUT
+      -->
+
+      <article class="about active" data-page="about">
+
+        <header>
+          <h2 class="h2 article-title"><span data-l="en">About me</span><span data-l="zh">关于我</span></h2>
+        </header>
+
+        <section class="about-text">
+          <p data-l="en">
+            I am an M.Sc. student in Signal Processing and Machine Learning at the School of EEE, Nanyang Technological University (NTU), Singapore,
+            working on embodied AI for robot manipulation. My research asks how a robot policy can <strong>see precisely</strong> (grounding-first VLA),
+            <strong>learn quickly</strong> in the real world (sample-efficient online RL with human-in-the-loop), and <strong>remember</strong> what it has done
+            (multi-timescale memory for long-horizon manipulation).
+          </p>
+          <p data-l="en">
+            I have hands-on experience training and deploying policies on Franka FR3 and ARX X5 dual-arm robots, and co-authored a paper in IEEE RA-L 2026.
+            Before NTU, I received my B.Eng. in Software Engineering from Dalian University of Technology.
+          </p>
+          <p data-l="zh">
+            我是南洋理工大学（NTU）电气与电子工程学院信号处理与机器学习硕士生，研究面向机器人操作的具身智能。
+            我关注三个问题：策略如何<strong>看得准</strong>（视觉定位优先的 VLA）、如何在真机上<strong>学得快</strong>（人机协同的高样本效率在线强化学习）、
+            以及如何<strong>记得住</strong>（面向长时程操作的多时间尺度记忆）。
+          </p>
+          <p data-l="zh">
+            有 Franka FR3 与 ARX X5 双臂真机上的策略训练与部署经验，参与的工作发表于 IEEE RA-L 2026。本科毕业于大连理工大学软件工程专业。
+          </p>
+        </section>
+
+        <section class="service">
+
+          <h3 class="h3 service-title"><span data-l="en">Research interests</span><span data-l="zh">研究方向</span></h3>
+
+          <ul class="service-list">
+
+            <li class="service-item">
+              <div class="service-icon-box"><ion-icon name="scan-outline"></ion-icon></div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title"><span data-l="en">Grounding-first VLA</span><span data-l="zh">视觉定位优先的 VLA</span></h4>
+                <p class="service-item-text">
+                  <span data-l="en">Point at the target first, then act: visual reference tokens, boxes and masks that condition a flow-matching action head.</span>
+                  <span data-l="zh">先指出目标再生成动作：用视觉引用 token、框与掩码条件化 Flow-Matching 动作头。</span>
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box"><ion-icon name="sync-outline"></ion-icon></div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title"><span data-l="en">Real-world online RL</span><span data-l="zh">真机在线强化学习</span></h4>
+                <p class="service-item-text">
+                  <span data-l="en">Sample-efficient, human-in-the-loop RL on real robots, with better credit assignment under sparse rewards.</span>
+                  <span data-l="zh">真机上的人机协同、高样本效率 RL，改善稀疏奖励下的信用分配。</span>
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box"><ion-icon name="time-outline"></ion-icon></div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title"><span data-l="en">Embodied memory</span><span data-l="zh">具身记忆</span></h4>
+                <p class="service-item-text">
+                  <span data-l="en">Short-term visual history and event-level long-term memory so policies notice failures and avoid repeating them.</span>
+                  <span data-l="zh">短时视觉历史与事件级长时记忆，让策略感知失败、避免重复犯错。</span>
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box"><ion-icon name="code-slash-outline"></ion-icon></div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title"><span data-l="en">Robot agents</span><span data-l="zh">Robot Agent</span></h4>
+                <p class="service-item-text">
+                  <span data-l="en">Coding agents that explore with perception and planning tools and distill successes into reusable closed-loop programs.</span>
+                  <span data-l="zh">借助感知与规划工具在线探索的 Coding Agent，把成功策略沉淀为可复用的闭环程序。</span>
+                </p>
+              </div>
+            </li>
+
+          </ul>
+
+        </section>
+
+        <section class="highlights">
+
+          <h3 class="h3 service-title"><span data-l="en">Highlights</span><span data-l="zh">代表性结果</span></h3>
+
+          <ul class="stat-list">
+            <li class="stat-card content-card">
+              <data class="stat-num">98.3%</data>
+              <p class="stat-label"><span data-l="en">LIBERO avg. success with grounding-first VLA (from ~92%)</span><span data-l="zh">Grounding VLA 在 LIBERO 四套任务平均成功率（原约 92%）</span></p>
+            </li>
+            <li class="stat-card content-card">
+              <data class="stat-num">80.6%</data>
+              <p class="stat-label"><span data-l="en">real-robot autonomous success with REMA (from 62.5%)</span><span data-l="zh">REMA 真机自主成功率（原 62.5%）</span></p>
+            </li>
+            <li class="stat-card content-card">
+              <data class="stat-num">29.9%</data>
+              <p class="stat-label"><span data-l="en">human intervention rate with REMA (from 60.8%)</span><span data-l="zh">REMA 人工干预率（原 60.8%）</span></p>
+            </li>
+          </ul>
+
+        </section>
+
+        <section class="next-steps">
+          <h3 class="h3 service-title"><span data-l="en">Looking ahead</span><span data-l="zh">后续研究计划</span></h3>
+          <p class="about-text-p" data-l="en">
+            Autonomous exploration and continual learning for robot agents: integrating 3D perception, geometric modeling, motion planning and robot control as MCP tools;
+            letting a coding agent explore online, analyze execution feedback and turn successful strategies into reusable closed-loop programs; and studying experience-memory management,
+            cross-task skill transfer and multi-agent parallel exploration, evaluated on simulation benchmarks such as DexJoCo and RoboDojo.
+          </p>
+          <p class="about-text-p" data-l="zh">
+            面向 Robot Agent 的自主探索与持续学习：通过 MCP Tools 集成三维感知、几何建模、运动规划与机器人控制；利用 Coding Agent 在线探索、分析执行反馈，并将成功策略转化为可复用的闭环程序。
+            进一步研究经验记忆管理、跨任务技能迁移与多 Agent 并行探索，拟在 DexJoCo、RoboDojo 等仿真基准上评估任务成功率、探索效率及跨场景泛化能力。
+          </p>
+        </section>
+
+      </article>
+
+
+      <!--
+        - #RESUME
+      -->
+
+      <article class="resume" data-page="resume">
+
+        <header>
+          <h2 class="h2 article-title"><span data-l="en">Resume</span><span data-l="zh">履历</span></h2>
+        </header>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box"><ion-icon name="book-outline"></ion-icon></div>
+            <h3 class="h3"><span data-l="en">Education</span><span data-l="zh">教育背景</span></h3>
+          </div>
+
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">Nanyang Technological University (NTU), Singapore</span><span data-l="zh">南洋理工大学（NTU）· 新加坡</span></h4>
+              <span>2025.08 — 2027.01</span>
+              <p class="timeline-text">
+                <span data-l="en">M.Sc. in Signal Processing and Machine Learning, School of EEE · CGPA <strong>4.50 / 5.00</strong></span>
+                <span data-l="zh">电气与电子工程学院 · 信号处理与机器学习硕士 · CGPA <strong>4.50/5.00</strong></span>
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">Dalian University of Technology (DUT), China</span><span data-l="zh">大连理工大学（DUT）· 大连</span></h4>
+              <span>2021.09 — 2025.06</span>
+              <p class="timeline-text">
+                <span data-l="en">B.Eng. in Software Engineering · GPA <strong>3.64</strong> · University Academic Excellence Scholarship (2nd class), Sci-Tech Innovation Scholarship</span>
+                <span data-l="zh">软件工程 · 工学学士 · GPA <strong>3.64</strong> · 校学习优秀二等奖、科技创新奖学金</span>
+              </p>
+            </li>
+          </ol>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box"><ion-icon name="briefcase-outline"></ion-icon></div>
+            <h3 class="h3"><span data-l="en">Experience</span><span data-l="zh">经历</span></h3>
+          </div>
+
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">Noetix Robotics (松延动力) — Embodied AI Algorithm Intern</span><span data-l="zh">松延动力 · 具身智能算法实习生</span></h4>
+              <span>2026.06 — 2026.09</span>
+              <p class="timeline-text">
+                <span data-l="en">π0.5 / DM0.5 on ARX X5 dual-arm robots: human-in-the-loop data aggregation, RTC real-time deployment, and short- and long-term memory for manipulation.</span>
+                <span data-l="zh">π0.5 / DM0.5 · ARX X5 双臂真机：人机协同数据聚合、基于 RTC 的实时部署，以及短时 / 长时记忆方法探索。</span>
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">A*STAR — Research Intern</span><span data-l="zh">A*STAR · 研究实习</span></h4>
+              <span>2026.01 — 2026.05</span>
+              <p class="timeline-text">
+                <span data-l="en">Grounding-first VLA with Qwen2.5-VL-3B and a flow-matching DiT action head; raised LIBERO average success from ~92% to 98.3%.</span>
+                <span data-l="zh">基于 Qwen2.5-VL-3B 与 Flow-Matching DiT 的 Grounding-first VLA；LIBERO 平均成功率由约 92% 提升至 98.3%。</span>
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">PINE Lab, NTU — Research</span><span data-l="zh">PINE Lab, NTU · 科研</span></h4>
+              <span>2025.09 — 2026.01</span>
+              <p class="timeline-text">
+                <span data-l="en">REMA: real-world online RL with explicit manifold alignment on a Franka FR3 (IEEE RA-L 2026, third author).</span>
+                <span data-l="zh">REMA：Franka FR3 上基于显式流形对齐的真机在线强化学习（IEEE RA-L 2026，第三作者）。</span>
+              </p>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">VOYAH (岚图汽车) — SoC Software Development Intern</span><span data-l="zh">岚图汽车科技有限公司（VOYAH）· SOC 软件开发实习生</span></h4>
+              <span><span data-l="en">Wuhan</span><span data-l="zh">武汉</span> · 2024.10 — 2025.04</span>
+              <p class="timeline-text">
+                <span data-l="en">LLM applications: a RAG QA system over R&amp;D documents, a code-retrieval module, and an LLM-based CodeAgent.</span>
+                <span data-l="zh">LLM 应用：研发文档 RAG 问答系统、代码库检索模块与基于 LLM 的 CodeAgent。</span>
+              </p>
+            </li>
+          </ol>
+
+        </section>
+
+        <section class="timeline">
+
+          <div class="title-wrapper">
+            <div class="icon-box"><ion-icon name="trophy-outline"></ion-icon></div>
+            <h3 class="h3"><span data-l="en">Honors &amp; Awards</span><span data-l="zh">竞赛与荣誉</span></h3>
+          </div>
+
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">MCM/ICM — Finalist (F Award)</span><span data-l="zh">美国大学生数学建模竞赛（MCM/ICM）F 奖</span></h4>
+              <span>2023</span>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">MathorCup Mathematical Modeling Challenge — National Third Prize</span><span data-l="zh">MathorCup 高校数学建模挑战赛国家三等奖</span></h4>
+              <span>2023</span>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">Chinese Mathematics Competitions — National Third Prize</span><span data-l="zh">全国大学生数学竞赛国家三等奖</span></h4>
+              <span>2022</span>
+            </li>
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title"><span data-l="en">APMCM Asia-Pacific Mathematical Contest in Modeling — National Third Prize</span><span data-l="zh">亚太地区大学生数学建模竞赛（APMCM）国家三等奖</span></h4>
+              <span>2022</span>
+            </li>
+          </ol>
+
+        </section>
+
+        <section class="skill">
+
+          <h3 class="h3 skills-title"><span data-l="en">Skills</span><span data-l="zh">专业技能</span></h3>
+
+          <ul class="skills-list content-card">
+            <li class="skills-item">
+              <h5 class="h5 skill-group"><span data-l="en">Methods</span><span data-l="zh">方法</span></h5>
+              <ul class="tag-list">
+                <li><span data-l="en">Imitation learning (weighted BC)</span><span data-l="zh">模仿学习（加权 BC）</span></li>
+                <li>Diffusion / Flow Matching</li>
+                <li>SAC</li><li>IBRL</li><li>HIL-SERL</li><li>WSRL</li>
+                <li><span data-l="en">VLA grounding &amp; memory</span><span data-l="zh">VLA grounding 与记忆</span></li>
+              </ul>
+            </li>
+            <li class="skills-item">
+              <h5 class="h5 skill-group"><span data-l="en">Engineering</span><span data-l="zh">工程</span></h5>
+              <ul class="tag-list">
+                <li>PyTorch</li><li>JAX</li><li>LeRobot</li><li>openpi</li><li>starVLA</li>
+                <li><span data-l="en">Multi-node multi-GPU training</span><span data-l="zh">多机多卡分布式训练</span></li>
+                <li><span data-l="en">Franka FR3 / ARX X5 deployment</span><span data-l="zh">Franka FR3 / ARX X5 真机部署</span></li>
+                <li><span data-l="en">LIBERO simulation</span><span data-l="zh">LIBERO 仿真</span></li>
+              </ul>
+            </li>
+          </ul>
+
+        </section>
+
+      </article>
+
+
+      <!--
+        - #RESEARCH (portfolio layout)
+      -->
+
+      <article class="portfolio" data-page="research">
+
+        <header>
+          <h2 class="h2 article-title"><span data-l="en">Research</span><span data-l="zh">研究与项目</span></h2>
+        </header>
+
+        <section class="projects">
+
+          <ul class="filter-list">
+            <li class="filter-item"><button class="active" data-filter-btn data-filter="all"><span data-l="en">All</span><span data-l="zh">全部</span></button></li>
+            <li class="filter-item"><button data-filter-btn data-filter="vla">VLA</button></li>
+            <li class="filter-item"><button data-filter-btn data-filter="rl"><span data-l="en">Real-world RL</span><span data-l="zh">真机 RL</span></button></li>
+            <li class="filter-item"><button data-filter-btn data-filter="memory"><span data-l="en">Memory</span><span data-l="zh">记忆</span></button></li>
+            <li class="filter-item"><button data-filter-btn data-filter="agent">LLM Agent</button></li>
+          </ul>
+
+          <div class="filter-select-box">
+            <button class="filter-select" data-select>
+              <div class="select-value" data-select-value><span data-l="en">Select category</span><span data-l="zh">选择分类</span></div>
+              <div class="select-icon"><ion-icon name="chevron-down"></ion-icon></div>
+            </button>
+            <ul class="select-list">
+              <li class="select-item"><button data-select-item data-filter="all"><span data-l="en">All</span><span data-l="zh">全部</span></button></li>
+              <li class="select-item"><button data-select-item data-filter="vla">VLA</button></li>
+              <li class="select-item"><button data-select-item data-filter="rl"><span data-l="en">Real-world RL</span><span data-l="zh">真机 RL</span></button></li>
+              <li class="select-item"><button data-select-item data-filter="memory"><span data-l="en">Memory</span><span data-l="zh">记忆</span></button></li>
+              <li class="select-item"><button data-select-item data-filter="agent">LLM Agent</button></li>
+            </ul>
+          </div>
+
+          <ul class="project-list">
+
+            <!-- Grounding-first VLA -->
+            <li class="project-item active" data-filter-item data-category="vla">
+              <a href="#" data-project-open>
+                <figure class="project-img diagram">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <img src="./assets/images/grounding.jpg" alt="Grounding-first VLA pipeline" loading="lazy">
+                </figure>
+                <h3 class="project-title"><span data-l="en">Grounding-first VLA</span><span data-l="zh">Grounding-first VLA</span></h3>
+                <p class="project-category">A*STAR · 2026</p>
+              </a>
+              <template data-project-detail>
+                <img class="detail-img" src="./assets/images/grounding.jpg" alt="Grounding-first VLA pipeline">
+                <h3 class="h3 detail-title"><span data-l="en">Grounding-first VLA: Localize via Visual References, Then Act</span><span data-l="zh">Grounding-first VLA：视觉引用引导的定位与动作生成</span></h3>
+                <p class="detail-meta"><span data-l="en">A*STAR · Research intern</span><span data-l="zh">A*STAR · 研究实习</span> · 2026.01 — 2026.05 · Qwen2.5-VL-3B / PaDT-inspired Grounding / Flow-Matching DiT / LIBERO</p>
+                <ul class="stat-list compact">
+                  <li class="stat-card content-card"><data class="stat-num">92% → 98.3%</data><p class="stat-label"><span data-l="en">avg. success on four LIBERO suites</span><span data-l="zh">LIBERO 四套任务平均成功率</span></p></li>
+                </ul>
+                <ul class="detail-points" data-l="en">
+                  <li><strong>Autoregressive architecture.</strong> Built on starVLA with Qwen2.5-VL-3B: a dual-view dynamic vocabulary produces visual reference tokens (VRT), and PaDT-style two-way attention predicts boxes, masks and confidences. An Affordance Token Bridge fuses references, mask-pooled and spatial features, which together with the raw VLM context condition a 16-layer flow-matching DiT that outputs 8-step × 7-D action chunks.</li>
+                  <li><strong>Parallel decoding.</strong> Learnable query tokens with task-role and camera-view encodings predict visual-patch reference distributions in a single VLM forward pass, replacing autoregressive decoding with differentiable soft references; offline PaDT-teacher distillation and action-alignment training cut the per-token decoding cost of grounding.</li>
+                  <li><strong>Results.</strong> Raised the average success rate of the existing grounding model on the four LIBERO suites from about 92% to 98.3% (≈ +6 points).</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li><strong>自回归架构</strong>：在 starVLA 上以 Qwen2.5-VL-3B 和双视角动态词表生成 VRT，经 PaDT 式 two-way attention 预测框、掩码与置信度；新增 Affordance Token Bridge 融合引用、掩码池化及空间特征，与原始 VLM 上下文共同条件化 16 层 Flow-Matching DiT，生成 8 步 × 7 维动作块。</li>
+                  <li><strong>并行优化</strong>：引入带任务角色与相机视角编码的可学习查询 Token，通过一次 VLM 前向并行预测视觉 Patch 引用分布，通过可微 soft references 替代自回归解码；设计离线 PaDT Teacher 蒸馏与动作对齐训练，降低视觉定位的逐 token 解码开销。</li>
+                  <li><strong>实验结果</strong>：现有 Grounding 模型在 LIBERO 四套任务上平均成功率由约 92% 提升至 98.3%（约 +6 个百分点）。</li>
+                </ul>
+              </template>
+            </li>
+
+            <!-- REMA -->
+            <li class="project-item active" data-filter-item data-category="rl">
+              <a href="#" data-project-open>
+                <figure class="project-img">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <img src="./assets/images/rema.jpg" alt="REMA concept figure" loading="lazy">
+                </figure>
+                <h3 class="project-title"><span data-l="en">REMA: Manifold-aligned Online RL</span><span data-l="zh">REMA：显式流形对齐的在线 RL</span></h3>
+                <p class="project-category">PINE Lab, NTU · RA-L 2026</p>
+              </a>
+              <template data-project-detail>
+                <img class="detail-img" src="./assets/images/rema.jpg" alt="REMA concept figure">
+                <h3 class="h3 detail-title"><span data-l="en">REMA: Real-world Online RL with Explicit Manifold Alignment</span><span data-l="zh">REMA：显式流形对齐的真机在线强化学习</span></h3>
+                <p class="detail-meta">PINE Lab, NTU · 2025.09 — 2026.01 · <span data-l="en">IEEE RA-L 2026 (third author)</span><span data-l="zh">IEEE RA-L 2026（第三作者）</span> · <a href="https://doi.org/10.1109/LRA.2026.3728323">Paper</a></p>
+                <ul class="stat-list compact">
+                  <li class="stat-card content-card"><data class="stat-num">62.5% → 80.6%</data><p class="stat-label"><span data-l="en">autonomous success, real-robot HIL RL</span><span data-l="zh">真机人机协同 RL 自主成功率</span></p></li>
+                  <li class="stat-card content-card"><data class="stat-num">60.8% → 29.9%</data><p class="stat-label"><span data-l="en">human intervention rate</span><span data-l="zh">人工干预率</span></p></li>
+                  <li class="stat-card content-card"><data class="stat-num">1.2× · +7.4%</data><p class="stat-label"><span data-l="en">faster convergence · higher success in sim</span><span data-l="zh">仿真收敛提速 · 成功率提升</span></p></li>
+                </ul>
+                <ul class="detail-points" data-l="en">
+                  <li><strong>Method.</strong> Binary sparse rewards cannot tell informative near-success failures from divergent exploration. REMA builds a reference manifold from the low-frequency DCT spectra of successful demonstrations and penalizes only off-manifold failures — a plug-and-play reward refinement that improves credit assignment in contact-rich manipulation without modifying the RL algorithm.</li>
+                  <li><strong>My contributions.</strong> Implemented trajectory alignment (arc-length resampling, quaternion handling), DCT manifold distance, quantile-threshold reward relabeling and EMA manifold updates; built the Franka FR3 real-robot training and evaluation system (SpaceMouse teleoperation, real-time intervention); ran HIL-SERL online training and WSRL fine-tuning on pipe-insertion and towel-folding tasks.</li>
+                  <li><strong>Results.</strong> In real-robot human-in-the-loop RL, autonomous success rose from 62.5% to 80.6% and the intervention rate dropped from 60.8% to 29.9%; in simulation, 1.2× faster convergence and +7.4% success; also improves WSRL fine-tuning under a 30-minute online budget.</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li><strong>方法</strong>：二值稀疏奖励无法区分“接近成功的有效失败”与“偏离任务的发散探索”。REMA 以成功示教的低频 DCT 频谱构建参考流形，仅惩罚离流形失败，以即插即用、不改动 RL 算法的方式改善接触密集型操作中的信用分配。</li>
+                  <li><strong>个人贡献</strong>：实现轨迹对齐（弧长重采样、四元数处理）、DCT 流形距离、分位数阈值奖励重标注与流形 EMA 更新；搭建 Franka FR3 真机训练评测系统（SpaceMouse 遥操作、实时介入），完成插管、叠毛巾任务的 HIL-SERL 在线训练与 WSRL 微调。</li>
+                  <li><strong>结果</strong>：真机人机协同 RL 中自主成功率 62.5% → 80.6%、人工干预率 60.8% → 29.9%；仿真收敛提速 1.2 倍、成功率提升 7.4%；30 分钟在线预算下同样提升 WSRL 微调效果。</li>
+                </ul>
+                <img class="detail-img" src="./assets/images/rema-realworld.jpg" alt="REMA vs. HIL-SERL learning curves on four real-world tasks">
+              </template>
+            </li>
+
+            <!-- HIL data loop + RTC deployment -->
+            <li class="project-item active" data-filter-item data-category="rl">
+              <a href="#" data-project-open>
+                <figure class="project-img diagram">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <img src="./assets/images/hil-loop.jpg" alt="Human-in-the-loop data aggregation loop" loading="lazy">
+                </figure>
+                <h3 class="project-title"><span data-l="en">HIL Data Loop &amp; Real-time Deployment</span><span data-l="zh">人机协同数据闭环与实时部署</span></h3>
+                <p class="project-category"><span data-l="en">Noetix Robotics</span><span data-l="zh">松延动力</span> · 2026</p>
+              </a>
+              <template data-project-detail>
+                <img class="detail-img" src="./assets/images/hil-loop.jpg" alt="Human-in-the-loop data aggregation loop">
+                <h3 class="h3 detail-title"><span data-l="en">Policy Training &amp; Real-time Deployment Framework</span><span data-l="zh">策略训练与实时部署框架</span></h3>
+                <p class="detail-meta"><span data-l="en">Noetix Robotics (松延动力) · Embodied AI Algorithm Intern</span><span data-l="zh">松延动力 · 具身智能算法实习生</span> · 2026.06 — 2026.09 · π0.5 / DM0.5 · ARX X5</p>
+                <ul class="detail-points" data-l="en">
+                  <li><strong>Human-in-the-loop data aggregation.</strong> Built a closed loop of SFT → real-robot rollout → human takeover → data aggregation → weighted BC → targeted re-collection. Supports real-time takeover and correction capture, separates demonstration, intervention and autonomous segments with different training weights, and mitigates train–deploy distribution shift over multiple rounds.</li>
+                  <li><strong>Real-time inference &amp; action smoothing.</strong> Implemented an RTC-based asynchronous inference and execution framework with latency compensation, One Euro filtering and joint-trajectory smoothing, reducing discontinuities and switching jerks for smoother dual-arm execution.</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li><strong>人机协同数据聚合与策略迭代</strong>：搭建“SFT → 真机 Rollout → 人工接管 → 数据聚合 → 加权 BC → 定向补采”的闭环训练框架；支持真机实时接管与纠偏数据采集，区分示教、人工介入及自主执行片段并施加差异化训练权重，通过多轮数据聚合与策略微调，缓解训练与部署间的状态分布偏移。</li>
+                  <li><strong>实时推理部署与动作平滑</strong>：实现基于 RTC 的真机异步推理与动作执行框架，引入推理延迟补偿、One Euro 滤波及关节轨迹平滑，减少推理延迟引起的动作不连续与控制切换突变，提升双臂操作的执行平稳性。</li>
+                </ul>
+              </template>
+            </li>
+
+            <!-- Short-term memory -->
+            <li class="project-item active" data-filter-item data-category="memory">
+              <a href="#" data-project-open>
+                <figure class="project-img diagram">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <img src="./assets/images/memory.jpg" alt="Short-term memory video encoder" loading="lazy">
+                </figure>
+                <h3 class="project-title"><span data-l="en">Short-term Memory (MEM)</span><span data-l="zh">短时记忆建模（MEM）</span></h3>
+                <p class="project-category"><span data-l="en">Noetix Robotics</span><span data-l="zh">松延动力</span> · 2026</p>
+              </a>
+              <template data-project-detail>
+                <img class="detail-img" src="./assets/images/memory.jpg" alt="Short-term memory video encoder">
+                <h3 class="h3 detail-title"><span data-l="en">Short-term Memory for VLA Policies (MEM)</span><span data-l="zh">短时记忆建模（MEM）</span></h3>
+                <p class="detail-meta"><span data-l="en">Noetix Robotics</span><span data-l="zh">松延动力</span> · 2026.06 — 2026.09 · DM0.5 · ARX X5</p>
+                <ul class="detail-points" data-l="en">
+                  <li>Fused the past 5 s of visual history via causal spatio-temporal attention: 6 of 27 SigLIP layers attend across 6 frames, and only current-frame tokens enter the LLM, so the sequence length is unchanged.</li>
+                  <li>Added time-encoded robot-state history and aligned observation sampling intervals between training and deployment.</li>
+                  <li>Lets the policy use recent feedback to adjust its actions — achieving failure awareness and avoidance of repeated mistakes in real-robot test cases.</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li>基于因果时空注意力融合过去 5 秒视觉历史：SigLIP 27 层中 6 层换成跨 6 帧的时空注意力，只有当前帧 token 进入 LLM，序列长度不变。</li>
+                  <li>引入带时间编码的机器人状态历史，并对齐训练与部署阶段的观测采样间隔。</li>
+                  <li>使策略能够利用近期操作反馈调整后续动作，在真机测试案例中实现失败感知与重复错误规避。</li>
+                </ul>
+              </template>
+            </li>
+
+            <!-- Event-level long-term memory -->
+            <li class="project-item active" data-filter-item data-category="memory">
+              <a href="#" data-project-open>
+                <figure class="project-img diagram">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <img src="./assets/images/memory-space.jpg" alt="Design space of robot memory" loading="lazy">
+                </figure>
+                <h3 class="project-title"><span data-l="en">Event-level Long-term Memory</span><span data-l="zh">事件级长时记忆</span></h3>
+                <p class="project-category"><span data-l="en">Noetix Robotics</span><span data-l="zh">松延动力</span> · 2026</p>
+              </a>
+              <template data-project-detail>
+                <img class="detail-img" src="./assets/images/memory-space.jpg" alt="Design space of robot memory">
+                <h3 class="h3 detail-title"><span data-l="en">Event-level Long-term Memory (baseline &amp; exploration)</span><span data-l="zh">事件级长时记忆（基线实现与方法探索）</span></h3>
+                <p class="detail-meta"><span data-l="en">Noetix Robotics</span><span data-l="zh">松延动力</span> · 2026.06 — 2026.09 · V-JEPA 2 / TCN / DM0.5 / VGGT</p>
+                <ul class="detail-points" data-l="en">
+                  <li>Trained a causal TCN tracker on frozen V-JEPA 2 features, recursively turning event detections into an explicit memory state that conditions DM0.5 action generation through memory tokens.</li>
+                  <li>Explored task-conditioned latent slots, learnable state updates and VGGT scene-reference memory, analyzing long-horizon generalization and how history is used.</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li>基于冻结 V-JEPA 2 训练因果 TCN tracker，将事件检测结果递推为显式记忆状态，经 memory tokens 条件化 DM0.5 动作生成。</li>
+                  <li>已尝试任务条件 latent slots、可学习状态更新与 VGGT 场景参考记忆，分析长序列泛化与历史信息利用。</li>
+                </ul>
+              </template>
+            </li>
+
+            <!-- RAG & CodeAgent -->
+            <li class="project-item active" data-filter-item data-category="agent">
+              <a href="#" data-project-open>
+                <figure class="project-img placeholder">
+                  <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
+                  <div class="placeholder-art" aria-hidden="true"><ion-icon name="terminal-outline"></ion-icon><span>RAG · CodeAgent</span></div>
+                </figure>
+                <h3 class="project-title"><span data-l="en">RAG QA &amp; LLM CodeAgent</span><span data-l="zh">RAG 问答与 LLM CodeAgent</span></h3>
+                <p class="project-category">VOYAH · 2024–2025</p>
+              </a>
+              <template data-project-detail>
+                <h3 class="h3 detail-title"><span data-l="en">RAG QA System &amp; LLM CodeAgent</span><span data-l="zh">RAG 问答系统与 LLM CodeAgent</span></h3>
+                <p class="detail-meta"><span data-l="en">VOYAH (岚图汽车) · SoC Software Development Intern · Wuhan</span><span data-l="zh">岚图汽车（VOYAH）· SOC 软件开发实习生 · 武汉</span> · 2024.10 — 2025.04</p>
+                <ul class="detail-points" data-l="en">
+                  <li>Built a RAG question-answering system over automotive R&amp;D documents, combining vector retrieval with knowledge-graph enhancement and tuning retrieval routing, prompt templates and answer post-processing.</li>
+                  <li>Built a code-retrieval module that parses and chunks repositories per language into vector indices; with query rewriting plus keyword and semantic search, it supplies task-relevant code context to agents.</li>
+                  <li>Developed an LLM-based CodeAgent with a “decompose → retrieve context → generate code → execute tools → revise from feedback” loop, integrating file I/O, content search, symbol analysis and command execution.</li>
+                </ul>
+                <ul class="detail-points" data-l="zh">
+                  <li>面向汽车研发文档构建 RAG 问答系统，结合向量检索与知识图谱增强，优化检索路由、Prompt 模板与答案后处理，支持研发知识查询与技术问题分析。</li>
+                  <li>构建代码库检索模块，按编程语言解析与分块项目代码，生成向量索引；结合查询改写、关键词与语义检索，为 Agent 提供任务相关代码上下文，辅助定位函数、变量及相关实现。</li>
+                  <li>开发基于 LLM 的 CodeAgent，设计“任务拆解—上下文检索—代码生成—工具执行—反馈修正”闭环，集成文件读写、内容搜索、代码符号分析与命令执行工具，支持代码理解、脚本生成与迭代调试。</li>
+                </ul>
+              </template>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+
+      <!--
+        - #PUBLICATIONS (blog layout)
+      -->
+
+      <article class="blog" data-page="publications">
+
+        <header>
+          <h2 class="h2 article-title"><span data-l="en">Publications</span><span data-l="zh">论文与专利</span></h2>
+        </header>
+
+        <section class="blog-posts">
+
+          <ul class="blog-posts-list">
+
+            <li class="blog-post-item">
+              <a href="https://doi.org/10.1109/LRA.2026.3728323">
+                <figure class="blog-banner-box">
+                  <img src="./assets/images/rema.jpg" alt="REMA concept figure" loading="lazy">
+                </figure>
+                <div class="blog-content">
+                  <div class="blog-meta">
+                    <p class="blog-category">IEEE RA-L</p>
+                    <span class="dot"></span>
+                    <time datetime="2026-11">2026</time>
+                  </div>
+                  <h3 class="h3 blog-item-title">Efficient Online Robotic Reinforcement Learning with Explicit Manifold Alignment</h3>
+                  <p class="blog-text">
+                    Wenkai Guo, Peizhi Tang, <strong class="me">Yukun Bai</strong>, Ziming Yan, Haoyuan Deng, Guanxing Lu, Shijie Li, Ziwei Wang
+                  </p>
+                  <p class="blog-text pub-venue">
+                    <em>IEEE Robotics and Automation Letters</em>, 11(11): 12703–12710, 2026
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            <li class="blog-post-item">
+              <a href="https://patents.google.com/patent/CN119719297A/zh">
+                <figure class="blog-banner-box placeholder">
+                  <div class="placeholder-art" aria-hidden="true"><ion-icon name="ribbon-outline"></ion-icon><span>CN119719297A</span></div>
+                </figure>
+                <div class="blog-content">
+                  <div class="blog-meta">
+                    <p class="blog-category"><span data-l="en">Patent</span><span data-l="zh">发明专利</span></p>
+                    <span class="dot"></span>
+                    <time datetime="2024">2024</time>
+                  </div>
+                  <h3 class="h3 blog-item-title">问答生成方法、装置、设备及存储介质</h3>
+                  <p class="blog-text">
+                    <span data-l="en">Question-answer generation method, apparatus, device and storage medium · first inventor</span>
+                    <span data-l="zh">第一发明人</span>
+                  </p>
+                  <p class="blog-text pub-venue">
+                    <span data-l="en">Pub. No. CN119719297A (App. No. 202411800170.8) · under substantive examination</span>
+                    <span data-l="zh">公开号 CN119719297A（申请号 202411800170.8）· 实质审查中</span>
+                  </p>
+                </div>
+              </a>
+            </li>
+
+          </ul>
+
+        </section>
+
+      </article>
+
+      <p class="site-footer">
+        <span data-l="en">Last updated: October 2026 · Layout based on</span><span data-l="zh">最后更新：2026 年 10 月 · 版式基于</span>
+        <a href="https://github.com/codewithsadee/vcard-personal-portfolio">vCard</a> (MIT)
+      </p>
+
     </div>
 
-    <div class="patent">
-      <div class="title" style="font-weight:600">
-        <a href="https://patents.google.com/patent/CN119719297A/zh">问答生成方法、装置、设备及存储介质</a>
-        <span data-l="en" style="font-weight:400;color:var(--muted)">(Question-answer generation method, apparatus, device and storage medium)</span>
-      </div>
-      <div class="venue" style="color:var(--muted);font-size:14.5px">
-        <span data-l="en">Invention patent, first inventor · Pub. No. CN119719297A (App. No. 202411800170.8) · under substantive examination</span>
-        <span data-l="zh">发明专利（第一发明人）· 公开号 CN119719297A（申请号 202411800170.8）· 实质审查中</span>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <section id="research">
-    <h2><span data-l="en">Research Projects</span><span data-l="zh">研究与项目经历</span></h2>
 
-    <article class="proj" id="grounding">
-      <div class="proj-head">
-        <h3>
-          <span data-l="en">Grounding-first VLA: Localize via Visual References, Then Act</span>
-          <span data-l="zh">Grounding-first VLA：视觉引用引导的定位与动作生成</span>
-        </h3>
-        <span class="meta">A*STAR · 2026.01 – 2026.05</span>
-      </div>
-      <div class="sub"><span data-l="en">Research intern</span><span data-l="zh">研究实习</span> · Qwen2.5-VL-3B / PaDT-inspired Grounding / Flow-Matching DiT / LIBERO</div>
-      <figure>
-        <img src="assets/grounding.jpg" alt="Grounding-first VLA pipeline: VLM outputs visual reference tokens, decoder expands them into objects, flow-matching DiT generates action chunks" loading="lazy">
-        <figcaption>
-          <span data-l="en">Pipeline: (1) where to look — the VLM emits visual reference tokens (VRT) pointing at image patches; (2) expand to objects — boxes, masks and object memory; (3) how to act — a flow-matching DiT generates 8 × 7-D action chunks.</span>
-          <span data-l="zh">流程：① 看哪里——VLM 输出指向图像 patch 的 VRT；② 展开成物体——框、掩码与物体记忆；③ 怎么做——Flow-Matching DiT 生成 8 步 × 7 维动作块。</span>
-        </figcaption>
-      </figure>
-      <div class="stats">
-        <div class="stat"><div class="num">92% → 98.3%</div><div class="lbl"><span data-l="en">avg. success on four LIBERO suites</span><span data-l="zh">LIBERO 四套任务平均成功率</span></div></div>
-      </div>
-      <ul class="points" data-l="en">
-        <li><b>Autoregressive architecture.</b> Built on starVLA with Qwen2.5-VL-3B: a dual-view dynamic vocabulary produces VRTs, and PaDT-style two-way attention predicts boxes, masks and confidences. An Affordance Token Bridge fuses references, mask-pooled and spatial features, which together with the raw VLM context condition a 16-layer flow-matching DiT that outputs 8-step × 7-D action chunks.</li>
-        <li><b>Parallel decoding.</b> Learnable query tokens with task-role and camera-view encodings predict visual-patch reference distributions in a single VLM forward pass, replacing autoregressive decoding with differentiable soft references; offline PaDT-teacher distillation and action-alignment training cut the per-token decoding cost of grounding.</li>
-        <li><b>Results.</b> Raised the average success rate of the existing grounding model on the four LIBERO suites from about <b>92% to 98.3%</b> (≈ +6 points).</li>
-      </ul>
-      <ul class="points" data-l="zh">
-        <li><b>自回归架构</b>：在 starVLA 上以 Qwen2.5-VL-3B 和双视角动态词表生成 VRT，经 PaDT 式 two-way attention 预测框、掩码与置信度；新增 Affordance Token Bridge 融合引用、掩码池化及空间特征，与原始 VLM 上下文共同条件化 16 层 Flow-Matching DiT，生成 8 步 × 7 维动作块。</li>
-        <li><b>并行优化</b>：引入带任务角色与相机视角编码的可学习查询 Token，通过一次 VLM 前向并行预测视觉 Patch 引用分布，通过可微 soft references 替代自回归解码；设计离线 PaDT Teacher 蒸馏与动作对齐训练，降低视觉定位的逐 token 解码开销。</li>
-        <li><b>实验结果</b>：现有 Grounding 模型在 LIBERO 四套任务上平均成功率由约 <b>92% 提升至 98.3%</b>（约 +6 个百分点）。</li>
-      </ul>
-    </article>
+  <!--
+    - #PROJECT MODAL
+  -->
 
-    <article class="proj" id="rema">
-      <div class="proj-head">
-        <h3>
-          <span data-l="en">REMA: Real-world Online RL with Explicit Manifold Alignment</span>
-          <span data-l="zh">REMA：显式流形对齐的真机在线强化学习</span>
-        </h3>
-        <span class="meta">PINE Lab, NTU · 2025.09 – 2026.01</span>
-      </div>
-      <div class="sub"><span data-l="en">IEEE RA-L 2026 (third author)</span><span data-l="zh">IEEE RA-L 2026（第三作者）</span> · Sparse-reward RL / Human-in-the-loop RL / Real-robot Manipulation</div>
-      <div class="stats">
-        <div class="stat"><div class="num">62.5% → 80.6%</div><div class="lbl"><span data-l="en">autonomous success, real-robot HIL RL</span><span data-l="zh">真机人机协同 RL 自主成功率</span></div></div>
-        <div class="stat"><div class="num">60.8% → 29.9%</div><div class="lbl"><span data-l="en">human intervention rate</span><span data-l="zh">人工干预率</span></div></div>
-        <div class="stat"><div class="num">1.2× · +7.4%</div><div class="lbl"><span data-l="en">faster convergence · higher success in sim</span><span data-l="zh">仿真收敛提速 · 成功率提升</span></div></div>
-      </div>
-      <ul class="points" data-l="en">
-        <li><b>Method.</b> Binary sparse rewards cannot tell informative near-success failures from divergent exploration. REMA builds a reference manifold from the low-frequency DCT spectra of successful demonstrations and penalizes only off-manifold failures — a plug-and-play reward refinement that improves credit assignment in contact-rich manipulation without modifying the RL algorithm.</li>
-        <li><b>My contributions.</b> Implemented trajectory alignment (arc-length resampling, quaternion handling), DCT manifold distance, quantile-threshold reward relabeling and EMA manifold updates; built the Franka FR3 real-robot training and evaluation system (SpaceMouse teleoperation, real-time intervention); ran HIL-SERL online training and WSRL fine-tuning on pipe-insertion and towel-folding tasks.</li>
-        <li><b>Results.</b> In real-robot human-in-the-loop RL, autonomous success rose from <b>62.5% to 80.6%</b> and the intervention rate dropped from <b>60.8% to 29.9%</b>; in simulation, 1.2× faster convergence and +7.4% success; also improves WSRL fine-tuning under a 30-minute online budget.</li>
-      </ul>
-      <ul class="points" data-l="zh">
-        <li><b>方法</b>：二值稀疏奖励无法区分“接近成功的有效失败”与“偏离任务的发散探索”。REMA 以成功示教的低频 DCT 频谱构建参考流形，仅惩罚离流形失败，以即插即用、不改动 RL 算法的方式改善接触密集型操作中的信用分配。</li>
-        <li><b>个人贡献</b>：实现轨迹对齐（弧长重采样、四元数处理）、DCT 流形距离、分位数阈值奖励重标注与流形 EMA 更新；搭建 Franka FR3 真机训练评测系统（SpaceMouse 遥操作、实时介入），完成插管、叠毛巾任务的 HIL-SERL 在线训练与 WSRL 微调。</li>
-        <li><b>结果</b>：真机人机协同 RL 中自主成功率 <b>62.5% → 80.6%</b>、人工干预率 <b>60.8% → 29.9%</b>；仿真收敛提速 1.2 倍、成功率提升 7.4%；30 分钟在线预算下同样提升 WSRL 微调效果。</li>
-      </ul>
-    </article>
-  </section>
+  <div class="modal-container project-modal-container" data-modal-container>
+    <div class="overlay" data-overlay></div>
+    <section class="project-modal" role="dialog" aria-modal="true">
+      <button class="modal-close-btn" data-modal-close-btn aria-label="Close">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="project-modal-body" data-modal-body></div>
+    </section>
+  </div>
 
-  <section id="experience">
-    <h2><span data-l="en">Industry Experience</span><span data-l="zh">实习经历</span></h2>
 
-    <article class="proj" id="memory">
-      <div class="proj-head">
-        <h3><span data-l="en">Noetix Robotics (松延动力) — Embodied AI Algorithm Intern</span><span data-l="zh">松延动力 · 具身智能算法实习生</span></h3>
-        <span class="meta">2026.06 – 2026.09</span>
-      </div>
-      <div class="sub">π0.5 / DM0.5 · <span data-l="en">dual-arm manipulation &amp; multi-timescale memory · ARX X5 dual-arm robot</span><span data-l="zh">双臂操作与多时间尺度记忆 · ARX X5 双臂真机</span></div>
-      <figure>
-        <img src="assets/memory.jpg" alt="Short-term memory: causal spatio-temporal attention over the past 5 seconds inside the SigLIP vision encoder" loading="lazy">
-        <figcaption>
-          <span data-l="en">Short-term memory (MEM): 6 of 27 SigLIP layers become causal spatio-temporal attention over 6 frames spanning 5 s; only current-frame tokens enter the LLM, so sequence length is unchanged.</span>
-          <span data-l="zh">短时记忆（MEM）：SigLIP 27 层中 6 层换成因果时空注意力，覆盖过去 5 秒共 6 帧；只有当前帧 token 进入 LLM，序列长度不变。</span>
-        </figcaption>
-      </figure>
+  <script src="./assets/js/script.js"></script>
 
-      <div class="group-label"><span data-l="en">Policy training &amp; real-time deployment</span><span data-l="zh">策略训练与实时部署框架</span></div>
-      <ul class="points" data-l="en">
-        <li><b>Human-in-the-loop data aggregation.</b> Built a closed loop of SFT → real-robot rollout → human takeover → data aggregation → weighted BC → targeted re-collection. Supports real-time takeover and correction capture, separates demonstration, intervention and autonomous segments with different training weights, and mitigates train–deploy distribution shift over multiple rounds.</li>
-        <li><b>Real-time inference &amp; action smoothing.</b> Implemented an RTC-based asynchronous inference and execution framework with latency compensation, One Euro filtering and joint-trajectory smoothing, reducing discontinuities and switching jerks for smoother dual-arm execution.</li>
-      </ul>
-      <ul class="points" data-l="zh">
-        <li><b>人机协同数据聚合与策略迭代</b>：搭建“SFT → 真机 Rollout → 人工接管 → 数据聚合 → 加权 BC → 定向补采”的闭环训练框架；支持真机实时接管与纠偏数据采集，区分示教、人工介入及自主执行片段并施加差异化训练权重，通过多轮数据聚合与策略微调，缓解训练与部署间的状态分布偏移。</li>
-        <li><b>实时推理部署与动作平滑</b>：实现基于 RTC 的真机异步推理与动作执行框架，引入推理延迟补偿、One Euro 滤波及关节轨迹平滑，减少推理延迟引起的动作不连续与控制切换突变，提升双臂操作的执行平稳性。</li>
-      </ul>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-      <div class="group-label"><span data-l="en">Multi-timescale memory</span><span data-l="zh">多时间尺度记忆方法探索</span></div>
-      <ul class="points" data-l="en">
-        <li><b>Short-term memory (MEM).</b> Fused the past 5 s of visual history via causal spatio-temporal attention, added time-encoded robot-state history, and aligned observation sampling intervals between training and deployment, letting the policy use recent feedback to adjust its actions — achieving failure awareness and avoidance of repeated mistakes in real-robot test cases.</li>
-        <li><b>Event-level long-term memory (baseline &amp; exploration).</b> Trained a causal TCN tracker on frozen V-JEPA 2 features, recursively turning event detections into an explicit memory state that conditions DM0.5 action generation through memory tokens; explored task-conditioned latent slots, learnable state updates and VGGT scene-reference memory, analyzing long-horizon generalization and use of history.</li>
-      </ul>
-      <ul class="points" data-l="zh">
-        <li><b>短时记忆建模（MEM）</b>：基于因果时空注意力融合过去 5 秒视觉历史，引入带时间编码的机器人状态历史，并对齐训练与部署阶段的观测采样间隔；使策略能够利用近期操作反馈调整后续动作，在真机测试案例中实现失败感知与重复错误规避。</li>
-        <li><b>事件级长时记忆（基线实现与方法探索）</b>：基于冻结 V-JEPA 2 训练因果 TCN tracker，将事件检测结果递推为显式记忆状态，经 memory tokens 条件化 DM0.5 动作生成；已尝试任务条件 latent slots、可学习状态更新与 VGGT 场景参考记忆，分析长序列泛化与历史信息利用。</li>
-      </ul>
-    </article>
-
-    <article class="proj">
-      <div class="proj-head">
-        <h3><span data-l="en">VOYAH (岚图汽车) — SoC Software Development Intern</span><span data-l="zh">岚图汽车科技有限公司（VOYAH）· SOC 软件开发实习生</span></h3>
-        <span class="meta"><span data-l="en">Wuhan</span><span data-l="zh">武汉</span> · 2024.10 – 2025.04</span>
-      </div>
-      <div class="sub">LLM Applications / RAG / Agent</div>
-      <ul class="points" data-l="en">
-        <li>Built a RAG question-answering system over automotive R&amp;D documents, combining vector retrieval with knowledge-graph enhancement and tuning retrieval routing, prompt templates and answer post-processing.</li>
-        <li>Built a code-retrieval module that parses and chunks repositories per language into vector indices; with query rewriting plus keyword and semantic search, it supplies task-relevant code context to agents.</li>
-        <li>Developed an LLM-based CodeAgent with a “decompose → retrieve context → generate code → execute tools → revise from feedback” loop, integrating file I/O, content search, symbol analysis and command execution.</li>
-      </ul>
-      <ul class="points" data-l="zh">
-        <li>面向汽车研发文档构建 RAG 问答系统，结合向量检索与知识图谱增强，优化检索路由、Prompt 模板与答案后处理，支持研发知识查询与技术问题分析。</li>
-        <li>构建代码库检索模块，按编程语言解析与分块项目代码，生成向量索引；结合查询改写、关键词与语义检索，为 Agent 提供任务相关代码上下文，辅助定位函数、变量及相关实现。</li>
-        <li>开发基于 LLM 的 CodeAgent，设计“任务拆解—上下文检索—代码生成—工具执行—反馈修正”闭环，集成文件读写、内容搜索、代码符号分析与命令执行工具，支持代码理解、脚本生成与迭代调试。</li>
-      </ul>
-    </article>
-  </section>
-
-  <section id="next">
-    <h2><span data-l="en">Next Steps</span><span data-l="zh">后续研究计划</span></h2>
-    <p data-l="en">
-      Autonomous exploration and continual learning for robot agents: integrating 3D perception, geometric modeling, motion planning and robot control as MCP tools;
-      letting a coding agent explore online, analyze execution feedback and turn successful strategies into reusable closed-loop programs; and studying experience-memory management,
-      cross-task skill transfer and multi-agent parallel exploration, evaluated on simulation benchmarks such as DexJoCo and RoboDojo.
-    </p>
-    <p data-l="zh">
-      面向 Robot Agent 的自主探索与持续学习：通过 MCP Tools 集成三维感知、几何建模、运动规划与机器人控制；利用 Coding Agent 在线探索、分析执行反馈，并将成功策略转化为可复用的闭环程序。
-      进一步研究经验记忆管理、跨任务技能迁移与多 Agent 并行探索，拟在 DexJoCo、RoboDojo 等仿真基准上评估任务成功率、探索效率及跨场景泛化能力。
-    </p>
-  </section>
-
-  <section id="education">
-    <h2><span data-l="en">Education</span><span data-l="zh">教育背景</span></h2>
-    <ul class="timeline">
-      <li>
-        <span class="what"><span data-l="en">Nanyang Technological University (NTU), Singapore</span><span data-l="zh">南洋理工大学（NTU）· 新加坡</span></span>
-        <span class="meta">2025.08 – 2027.01</span>
-        <span class="detail"><span data-l="en">M.Sc. in Signal Processing and Machine Learning, School of EEE · CGPA <b>4.50 / 5.00</b></span><span data-l="zh">电气与电子工程学院 · 信号处理与机器学习硕士 · CGPA <b>4.50/5.00</b></span></span>
-      </li>
-      <li>
-        <span class="what"><span data-l="en">Dalian University of Technology (DUT), China</span><span data-l="zh">大连理工大学（DUT）· 大连</span></span>
-        <span class="meta">2021.09 – 2025.06</span>
-        <span class="detail"><span data-l="en">B.Eng. in Software Engineering · GPA <b>3.64</b> · University Academic Excellence Scholarship (2nd class), Sci-Tech Innovation Scholarship</span><span data-l="zh">软件工程 · 工学学士 · GPA <b>3.64</b> · 校学习优秀二等奖、科技创新奖学金</span></span>
-      </li>
-    </ul>
-  </section>
-
-  <section id="skills">
-    <h2><span data-l="en">Skills</span><span data-l="zh">专业技能</span></h2>
-    <dl class="skills">
-      <dt><span data-l="en">Methods</span><span data-l="zh">方法</span></dt>
-      <dd><span data-l="en">Imitation learning (weighted BC), Diffusion / Flow Matching, RL (SAC, IBRL, HIL-SERL, WSRL), VLA grounding and memory</span><span data-l="zh">模仿学习（加权 BC）、Diffusion / Flow Matching、RL（SAC、IBRL、HIL-SERL、WSRL）、VLA grounding 与记忆</span></dd>
-      <dt><span data-l="en">Engineering</span><span data-l="zh">工程</span></dt>
-      <dd><span data-l="en">PyTorch, JAX, LeRobot, openpi, starVLA; multi-node multi-GPU distributed training; real-robot deployment on Franka FR3 / ARX X5; LIBERO simulation</span><span data-l="zh">PyTorch、JAX、LeRobot、openpi、starVLA；多机多卡分布式训练；Franka FR3 / ARX X5 真机部署、LIBERO 仿真</span></dd>
-    </dl>
-  </section>
-
-  <section id="honors">
-    <h2><span data-l="en">Honors &amp; Awards</span><span data-l="zh">竞赛与荣誉</span></h2>
-    <ul class="timeline">
-      <li><span class="what"><span data-l="en">MCM/ICM — Finalist (F Award)</span><span data-l="zh">美国大学生数学建模竞赛（MCM/ICM）F 奖</span></span><span class="meta">2023</span></li>
-      <li><span class="what"><span data-l="en">MathorCup Mathematical Modeling Challenge — National Third Prize</span><span data-l="zh">MathorCup 高校数学建模挑战赛国家三等奖</span></span><span class="meta">2023</span></li>
-      <li><span class="what"><span data-l="en">Chinese Mathematics Competitions — National Third Prize</span><span data-l="zh">全国大学生数学竞赛国家三等奖</span></span><span class="meta">2022</span></li>
-      <li><span class="what"><span data-l="en">APMCM Asia-Pacific Mathematical Contest in Modeling — National Third Prize</span><span data-l="zh">亚太地区大学生数学建模竞赛（APMCM）国家三等奖</span></span><span class="meta">2022</span></li>
-    </ul>
-  </section>
-
-  <footer>
-    <span data-l="en">Last updated: October 2026</span><span data-l="zh">最后更新：2026 年 10 月</span>
-  </footer>
-</main>
-
-<script>
-  (function () {
-    var root = document.documentElement;
-    var langBtn = document.getElementById('langBtn');
-    var themeBtn = document.getElementById('themeBtn');
-
-    function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
-
-    function setLang(lang) {
-      root.lang = lang === 'zh' ? 'zh-CN' : 'en';
-      langBtn.textContent = lang === 'zh' ? 'EN' : '中文';
-      document.title = lang === 'zh' ? '白宇坤 · Yukun Bai' : 'Yukun Bai · 白宇坤';
-    }
-    var params = new URLSearchParams(location.search);
-    var lang = params.get('lang') || load('lang') ||
-      ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
-    setLang(lang);
-    langBtn.addEventListener('click', function () {
-      lang = lang === 'zh' ? 'en' : 'zh';
-      setLang(lang);
-      save('lang', lang);
-    });
-
-    var theme = load('theme');
-    if (theme) root.setAttribute('data-theme', theme);
-    themeBtn.addEventListener('click', function () {
-      var dark = root.getAttribute('data-theme')
-        ? root.getAttribute('data-theme') === 'dark'
-        : window.matchMedia('(prefers-color-scheme: dark)').matches;
-      theme = dark ? 'light' : 'dark';
-      root.setAttribute('data-theme', theme);
-      save('theme', theme);
-    });
-  })();
-</script>
 </body>
+
 </html>

@@ -1,0 +1,264 @@
+/*-----------------------------------*\
+  #custom.css — additions on top of the vCard template (style.css)
+\*-----------------------------------*/
+
+:root {
+  --ff-poppins: 'Poppins', 'Noto Sans SC', 'PingFang SC', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+/* language switching: elements carry data-l="en" or data-l="zh" */
+html[lang="en"] [data-l="zh"],
+html[lang="zh-CN"] [data-l="en"] { display: none !important; }
+
+span[data-l] { display: inline; }
+
+/* the template colors every span in a timeline gold; keep that for the date line only */
+.timeline-item-title [data-l],
+.timeline-text [data-l] { color: inherit; font-weight: inherit; line-height: inherit; }
+html[lang="zh-CN"] .about-text p,
+html[lang="zh-CN"] .timeline-text,
+html[lang="zh-CN"] .detail-points { letter-spacing: 0.02em; }
+
+strong { color: var(--white-2); font-weight: var(--fw-500); }
+
+
+/**
+ * SIDEBAR
+ */
+
+.avatar-initials {
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: var(--fw-600);
+  letter-spacing: 1px;
+  color: var(--orange-yellow-crayola);
+}
+
+.service-item-title, .timeline-item-title, .blog-item-title, .detail-title { text-transform: none; }
+
+@media (min-width: 1250px) {
+  .contact-info .contact-link { white-space: normal; }
+}
+
+.contact-info .contact-text {
+  color: var(--white-2);
+  font-size: var(--fs-7);
+}
+
+.navbar-link.lang-btn {
+  color: var(--orange-yellow-crayola);
+  border: 1px solid var(--jet);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+
+/**
+ * ABOUT
+ */
+
+.service-icon-box ion-icon {
+  font-size: 40px;
+  margin: auto;
+  color: var(--orange-yellow-crayola);
+  --ionicon-stroke-width: 28px;
+}
+
+.highlights, .next-steps { margin-bottom: 30px; }
+
+.about-text-p {
+  color: var(--light-gray);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-300);
+  line-height: 1.6;
+}
+
+.stat-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.stat-card { padding: 18px 20px; }
+.stat-card::before { border-radius: 14px; }
+
+.stat-num {
+  display: block;
+  color: var(--orange-yellow-crayola);
+  font-size: var(--fs-1);
+  font-weight: var(--fw-600);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  color: var(--light-gray);
+  font-size: var(--fs-7);
+  font-weight: var(--fw-300);
+  line-height: 1.5;
+}
+
+.stat-list.compact { margin: 16px 0; }
+.stat-list.compact .stat-num { font-size: var(--fs-2); }
+
+
+/**
+ * RESUME
+ */
+
+.skills-item:not(:last-child) { margin-bottom: 18px; }
+
+.skill-group { margin-bottom: 10px; }
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-list li {
+  color: var(--light-gray);
+  font-size: var(--fs-7);
+  font-weight: var(--fw-300);
+  background: var(--onyx);
+  border: 1px solid var(--jet);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+
+/**
+ * RESEARCH
+ */
+
+/* every card the same shape, whatever the source figure's aspect ratio */
+.project-img { height: auto; aspect-ratio: 16 / 10; }
+.project-img img { height: 100%; }
+
+/* diagrams are not photos: show them whole on their own light background */
+.project-img.diagram { background: hsl(60, 12%, 96%); }
+.project-img.diagram img { object-fit: contain; padding: 10px; }
+
+.project-img.placeholder,
+.blog-banner-box.placeholder {
+  background: var(--bg-gradient-jet);
+  border: 1px solid var(--jet);
+}
+
+.placeholder-art {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--orange-yellow-crayola);
+  font-size: var(--fs-6);
+  letter-spacing: 0.5px;
+}
+
+.placeholder-art ion-icon { font-size: 48px; --ionicon-stroke-width: 24px; }
+
+.project-title { text-transform: none; }
+
+.project-modal {
+  background: var(--eerie-black-2);
+  position: relative;
+  width: calc(100% - 24px);
+  max-width: 860px;
+  max-height: calc(100vh - 30px);
+  overflow-y: auto;
+  margin: 15px 12px;
+  padding: 20px;
+  border: 1px solid var(--jet);
+  border-radius: 14px;
+  box-shadow: var(--shadow-5);
+  transform: scale(1.05);
+  opacity: 0;
+  transition: var(--transition-1);
+  z-index: 2;
+}
+
+.modal-container.active .project-modal { transform: scale(1); opacity: 1; }
+
+.project-modal .modal-close-btn { position: sticky; top: 0; margin-left: auto; z-index: 3; }
+
+.detail-img {
+  width: 100%;
+  border-radius: 12px;
+  background: hsl(60, 12%, 96%);
+  margin: 12px 0 18px;
+}
+
+.detail-title { margin-bottom: 6px; }
+
+.detail-meta {
+  color: var(--light-gray-70);
+  font-size: var(--fs-7);
+  margin-bottom: 8px;
+}
+
+.detail-meta a { display: inline; color: var(--orange-yellow-crayola); }
+
+.detail-points { padding-left: 18px; }
+
+.detail-points li {
+  list-style: disc;
+  color: var(--light-gray);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-300);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.detail-points li::marker { color: var(--orange-yellow-crayola); }
+
+body.modal-open { overflow: hidden; }
+
+
+/**
+ * PUBLICATIONS
+ */
+
+.blog-post-item .me { color: var(--orange-yellow-crayola); font-weight: var(--fw-500); }
+
+.pub-venue { margin-top: 6px; color: var(--light-gray-70); }
+
+.blog-banner-box img { object-position: top; }
+
+
+/**
+ * FOOTER
+ */
+
+.site-footer {
+  color: var(--light-gray-70);
+  font-size: var(--fs-8);
+  text-align: center;
+  margin: 10px 0 20px;
+}
+
+.site-footer a { display: inline; color: var(--light-gray); }
+
+
+/**
+ * RESPONSIVE
+ */
+
+@media (min-width: 580px) {
+  .avatar-initials { width: 120px; height: 120px; font-size: 38px; }
+  .project-modal { padding: 30px; }
+}
+
+@media (min-width: 768px) {
+  .stat-list { grid-template-columns: repeat(3, 1fr); }
+  .stat-list.compact { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+
+@media (min-width: 1250px) {
+  .avatar-initials { width: 150px; height: 150px; font-size: 46px; }
+}
