@@ -262,3 +262,11 @@ body.modal-open { overflow: hidden; }
 @media (min-width: 1250px) {
   .avatar-initials { width: 150px; height: 150px; font-size: 46px; }
 }
+
+
+/**
+ * AVATAR PHOTO
+ */
+
+.avatar-box { overflow: hidden; }
+.avatar-box img { aspect-ratio: 1; height: auto; object-fit: cover; }
