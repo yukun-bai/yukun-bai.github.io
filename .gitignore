@@ -1,0 +1,49 @@
+# Ignore the contents of the _site directory and other cache directories
+_site/
+.sass-cache/
+
+# Ignore the directory for local files during development
+local/
+
+# Ignore the Gemfile that is generated
+Gemfile.lock
+
+# Ignore files created by npm
+node_modules
+package-lock.json
+
+# Ignore the vendor file at root level and bundle for alternative installation
+/vendor/
+.bundle/
+
+# Ignore folders related to IDEs
+.vscode/
+
+# Ignore files created by MacOS
+.DS_Store
+
+# Ignore the main.min.js since it should be built as part of jekyll-build.yml
+# main.min.js is committed: GitHub Pages builds from the branch and cannot run npm
+
+# Template sample content that is not part of this site
+/files/
+/_pages/archive-layout-with-content.md
+/_pages/category-archive.html
+/_pages/collection-archive.html
+/_pages/markdown.md
+/_pages/non-menu-page.md
+/_pages/page-archive.html
+/_pages/portfolio.html
+/_pages/sitemap.md
+/_pages/tag-archive.html
+/_pages/talkmap.html
+/_pages/talks.html
+/_pages/teaching.html
+/_pages/terms.md
+/_pages/year-archive.html
+/images/bio-photo.jpg
+/images/bio-photo-2.jpg
+/images/500x300.png
+/images/editing-talk.png
+/images/profile.png
+/_data/comments/

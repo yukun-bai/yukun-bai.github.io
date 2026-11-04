@@ -1,10 +1,11 @@
-# Yukun Bai · 白宇坤
+# Yukun Bai
 
-Personal homepage, served by GitHub Pages. Plain static HTML — edit `index.html` and push.
+Personal academic homepage, served by GitHub Pages at https://yukun-bai.github.io.
 
-- Every text block has an English and a Chinese version (`data-l="en"` / `data-l="zh"`); edit both.
-- Research cards: the card is the `<a data-project-open>`, the popup content is the `<template data-project-detail>` next to it.
-- The sidebar photo is `assets/images/avatar.jpg` (square, 600×600); replace the file to change it.
+Built on the [Academic Pages](https://github.com/academicpages/academicpages.github.io) template (a fork of Minimal Mistakes, MIT licensed, see `LICENSE`).
 
-Layout and base styles (`assets/css/style.css`) come from
-[vCard personal portfolio](https://github.com/codewithsadee/vcard-personal-portfolio) by codewithsadee, MIT licensed — see `LICENSE-vcard`.
+- Site settings, sidebar profile and photo: `_config.yml` (photo is `images/profile.jpg`)
+- Top menu: `_data/navigation.yml`
+- Pages: `_pages/about.md` (home), `_pages/cv.md`, `_pages/publications.html`
+- Publications: one file per entry in `_publications/`
+- `assets/js/main.min.js` is a plain concatenation of `assets/js/plugins/jquery.greedy-navigation.js`, `_main.js` and `theme.js`; rebuild it with `cat` in that order after editing any of them.
